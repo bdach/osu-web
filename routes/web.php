@@ -485,9 +485,14 @@ Route::group(['as' => 'api.', 'prefix' => 'api', 'middleware' => ['api', Throttl
 
         Route::apiResource('seasonal-backgrounds', 'SeasonalBackgroundsController', ['only' => ['index']]);
 
-        Route::group(['prefix' => 'scores/{mode}', 'as' => 'scores.'], function () {
+        Route::group(['prefix' => 'scores', 'as' => 'scores.'], function () {
+            // make sure it's matched before {mode}/{score}
             Route::get('{score}/download', 'ScoresController@download')->middleware(ThrottleRequests::getApiThrottle('scores_download'))->name('download');
-            Route::get('{score}', 'ScoresController@show')->name('show');
+
+            Route::group(['prefix' => '{mode}'], function () {
+                Route::get('{score}/download', 'ScoresController@download')->middleware(ThrottleRequests::getApiThrottle('scores_download'))->name('download-legacy');
+                Route::get('{score}', 'ScoresController@show')->name('show-legacy');
+            });
         });
 
         // Beatmapsets
