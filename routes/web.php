@@ -580,6 +580,7 @@ Route::group(['prefix' => '_lio', 'middleware' => 'lio', 'as' => 'interop.'], fu
             Route::group(['prefix' => '{beatmapset}'], function () {
                 Route::post('broadcast-new', 'BeatmapsetsController@broadcastNew')->name('broadcast-new');
                 Route::post('broadcast-revive', 'BeatmapsetsController@broadcastRevive')->name('broadcast-revive');
+                Route::post('create-modding-v1-thread', 'BeatmapsetsController@createModdingV1Thread')->name('create-modding-v1-thread');
                 Route::post('disqualify', 'BeatmapsetsController@disqualify')->name('disqualify');
             });
         });
