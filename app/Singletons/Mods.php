@@ -92,21 +92,31 @@ class Mods
         }
     }
 
-    public function assertValidForMultiplayer(int $rulesetId, array $ids, bool $isRealtime, bool $isRequired): void
+    public function assertValidForMultiplayer(int $rulesetId, array $ids, bool $isRealtime, bool $isRequired, bool $isFreestyle): void
     {
         $this->validateSelection($rulesetId, $ids);
 
-        if ($isRealtime) {
-            $attr = $isRequired ? 'ValidForMultiplayer' : 'ValidForMultiplayerAsFreeMod';
-        } else {
-            $attr = 'UserPlayable';
-        }
-
         foreach ($ids as $id) {
             $mod = $this->mods[$rulesetId][$id];
+            $messageType = $isRequired ? 'required' : 'allowed';
 
-            if (!$mod[$attr]) {
-                $messageType = $isRequired ? 'required' : 'allowed';
+            if (!$isRealtime && !$mod['UserPlayable']) {
+                throw new InvariantException("mod cannot be set as {$messageType}: {$id}");
+            }
+
+            if ($isRealtime && $isRequired && !$mod['ValidForMultiplayer']) {
+                throw new InvariantException("mod cannot be set as {$messageType}: {$id}");
+            }
+
+            if ($isRealtime && $isRequired && $isFreestyle && $mod['ValidForMultiplayerAsFreeMod']) {
+                throw new InvariantException("mod cannot be set as {$messageType}: {$id}");
+            }
+
+            if ($isRealtime && !$isRequired && !$mod['ValidForMultiplayerAsFreeMod']) {
+                throw new InvariantException("mod cannot be set as {$messageType}: {$id}");
+            }
+
+            if ($isRealtime && !$isRequired && $isFreestyle) {
                 throw new InvariantException("mod cannot be set as {$messageType}: {$id}");
             }
         }
