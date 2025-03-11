@@ -14,7 +14,7 @@ import MatchGame from '../interfaces/match-game-json';
 import { classWithModifiers } from '../utils/css';
 
 interface Props {
-  beatmap: BeatmapJson | null;
+  beatmap: BeatmapJson;
   beatmapset: BeatmapsetJson;
   game: MatchGame;
 }
@@ -23,15 +23,15 @@ export default function GameHeader(props: Props) {
   const timeFormat = 'LTS';
 
   let title = getTitle(props.beatmapset);
-  const version = props.beatmap?.version;
-  if (version != null) {
+  const version = props.beatmap.version;
+  if (version) {
     title += ` [${version}]`;
   }
 
   return (
     <a
       className={'mp-history-game__header'}
-      href={props.beatmap ? route('beatmaps.show', { beatmap: props.beatmap.id }) : ''}>
+      href={props.beatmap.id > 0 ? route('beatmaps.show', { beatmap: props.beatmap.id }) : ''}>
       <BeatmapsetCover
         beatmapset={props.beatmapset}
         modifiers={'full'}
