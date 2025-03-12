@@ -15,11 +15,7 @@ import UserJson from '../interfaces/user-json';
 import { classWithModifiers } from '../utils/css';
 import GameHeader from './game-header';
 import Score from './score';
-
-interface TeamScores {
-  blue: number;
-  red: number;
-}
+import { TeamScores } from './content';
 
 type SortedScore = MatchScore & {
   teamRank: number;

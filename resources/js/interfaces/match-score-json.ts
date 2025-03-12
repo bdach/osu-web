@@ -6,8 +6,8 @@
 
 export interface MatchScoreDetails {
   pass: boolean;
-  team: string;
   slot: number;
+  team: 'blue' | 'red';
 }
 
 export interface MatchScoreStatistics {

@@ -8,11 +8,11 @@ import { classWithModifiers } from 'utils/css';
 import { trans } from 'utils/lang';
 import { linkHtml } from 'utils/url';
 import MatchEvent from '../interfaces/match-event-json';
-import User from '../models/user';
+import UserJson from '../interfaces/user-json';
 
 interface Props {
   event: MatchEvent;
-  users: [User];
+  users: [UserJson];
 }
 
 export default function Event(props: Props) {
@@ -33,6 +33,10 @@ export default function Event(props: Props) {
 
   if (user !== null && event_type !== 'match-disbanded') {
     userLink = linkHtml(route('users.show', { user: user.id }), user.username, { classNames: ['mp-history-event__username'] });
+  }
+
+  if (event_type === 'other') {
+    return null;
   }
 
   return (

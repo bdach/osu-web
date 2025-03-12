@@ -20,6 +20,7 @@ export type TeamType =
 export default interface MatchGame {
   beatmap: BeatmapJson | null;
   end_time: string | null;
+  id: number;
   mode: Ruleset;
   mods: [string]; // TODO: get into proper shape
   scores: [MatchScore];

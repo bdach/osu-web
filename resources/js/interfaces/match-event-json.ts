@@ -9,7 +9,8 @@ export type MatchEventType =
   | 'player-kicked'
   | 'match-created'
   | 'match-disbanded'
-  | 'host-changed';
+  | 'host-changed'
+  | 'other';
 
 export interface MatchEventDetail {
   type: MatchEventType;
