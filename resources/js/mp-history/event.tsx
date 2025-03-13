@@ -7,7 +7,7 @@ import * as React from 'react';
 import { classWithModifiers } from 'utils/css';
 import { trans } from 'utils/lang';
 import { linkHtml } from 'utils/url';
-import MatchEvent from '../interfaces/match-event-json';
+import { MatchEvent } from '../interfaces/match-json';
 import UserJson from '../interfaces/user-json';
 
 interface Props {

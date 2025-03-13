@@ -5,8 +5,7 @@ import HeaderV4 from 'components/header-v4';
 import { route } from 'laroute';
 import _ from 'lodash';
 import * as React from 'react';
-import MatchEvent from '../interfaces/match-event-json';
-import Match, { MatchDetails } from '../interfaces/match-json';
+import Match, { MatchDetails, MatchEvent } from '../interfaces/match-json';
 import UserJson from '../interfaces/user-json';
 import { classWithModifiers } from '../utils/css';
 import Content from './content';
@@ -16,7 +15,7 @@ interface Props {
 }
 
 interface State {
-  currentGameId: number;
+  currentGameId?: number;
   events: MatchEvent[];
   latestEventId: number;
   loadingNext: boolean;

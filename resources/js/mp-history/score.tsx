@@ -7,7 +7,7 @@ import { route } from 'laroute';
 import * as React from 'react';
 import { formatNumber } from 'utils/html';
 import { trans } from 'utils/lang';
-import MatchScore, { MatchScoreStatistics } from '../interfaces/match-score-json';
+import { MatchScore, MatchScoreStatistics } from '../interfaces/match-json';
 import Ruleset from '../interfaces/ruleset';
 import UserJson from '../interfaces/user-json';
 import { classWithModifiers } from '../utils/css';

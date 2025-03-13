@@ -10,7 +10,7 @@ import { getArtist, getTitle } from 'utils/beatmapset-helper';
 import { trans } from 'utils/lang';
 import BeatmapJson from '../interfaces/beatmap-json';
 import BeatmapsetJson from '../interfaces/beatmapset-json';
-import MatchGame from '../interfaces/match-game-json';
+import { MatchGame } from '../interfaces/match-json';
 import { classWithModifiers } from '../utils/css';
 
 interface Props {

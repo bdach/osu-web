@@ -6,16 +6,14 @@ import * as React from 'react';
 import { classWithModifiers } from 'utils/css';
 import { bottomPageDistance } from 'utils/html';
 import { trans } from 'utils/lang';
-import MatchEvent from '../interfaces/match-event-json';
-import MatchGame from '../interfaces/match-game-json';
-import { MatchDetails } from '../interfaces/match-json';
+import { MatchDetails, MatchEvent, MatchGame } from '../interfaces/match-json';
 import UserJson from '../interfaces/user-json';
 import Event from './event';
 import Game from './game';
 
 interface Props {
-  currentGameId: number | null;
-  events: MatchEvent[] | null;
+  currentGameId?: number;
+  events?: MatchEvent[];
   hasNext: boolean;
   hasPrevious: boolean;
   isAutoloading: boolean;

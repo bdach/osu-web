@@ -8,14 +8,13 @@ import { formatNumber } from 'utils/html';
 import { trans, transExists } from 'utils/lang';
 import BeatmapJson from '../interfaces/beatmap-json';
 import BeatmapsetJson from '../interfaces/beatmapset-json';
-import MatchEvent from '../interfaces/match-event-json';
-import MatchScore from '../interfaces/match-score-json';
+import { MatchEvent, MatchScore } from '../interfaces/match-json';
 import Ruleset from '../interfaces/ruleset';
 import UserJson from '../interfaces/user-json';
 import { classWithModifiers } from '../utils/css';
+import { TeamScores } from './content';
 import GameHeader from './game-header';
 import Score from './score';
-import { TeamScores } from './content';
 
 type SortedScore = MatchScore & {
   teamRank: number;
