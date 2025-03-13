@@ -24,7 +24,7 @@ type SortedScore = MatchScore & {
 interface Props {
   event: MatchEvent;
   teamScores: TeamScores;
-  users: [UserJson];
+  users: { [userId: string]: UserJson };
 }
 
 export default function Game(props: Props) {

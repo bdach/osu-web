@@ -15,7 +15,7 @@ import { classWithModifiers } from '../utils/css';
 interface Props {
   mode: Ruleset;
   score: MatchScore;
-  users: [UserJson];
+  users: { [userId: string]: UserJson };
 }
 
 export default function Score(props: Props) {

@@ -12,7 +12,7 @@ import UserJson from '../interfaces/user-json';
 
 interface Props {
   event: MatchEvent;
-  users: [UserJson];
+  users: { [userId: string]: UserJson };
 }
 
 export default function Event(props: Props) {

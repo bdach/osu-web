@@ -8,23 +8,23 @@ import { bottomPageDistance } from 'utils/html';
 import { trans } from 'utils/lang';
 import MatchEvent from '../interfaces/match-event-json';
 import MatchGame from '../interfaces/match-game-json';
-import Match, { MatchDetails } from '../interfaces/match-json';
+import { MatchDetails } from '../interfaces/match-json';
 import UserJson from '../interfaces/user-json';
 import Event from './event';
 import Game from './game';
 
 interface Props {
   currentGameId: number | null;
-  events: [MatchEvent] | null;
+  events: MatchEvent[] | null;
   hasNext: boolean;
   hasPrevious: boolean;
   isAutoloading: boolean;
   loadingNext: boolean;
   loadingPrevious: boolean;
-  loadNext: (match: Match) => void;
-  loadPrevious: (match: Match) => void;
+  loadNext: () => void;
+  loadPrevious: () => void;
   match: MatchDetails;
-  users: [UserJson];
+  users: { [userId: string]: UserJson };
 }
 
 interface Snapshot {
@@ -41,7 +41,7 @@ export interface TeamScores {
 export default class Content extends React.PureComponent<Props> {
   scoresCache: { [id: number]: TeamScores } = {};
 
-  componentDidUpdate(prevProps: Readonly<Props>, prevState: Readonly<any>, snapshot?: Snapshot) {
+  componentDidUpdate(_: Readonly<Props>, __: Readonly<any>, snapshot?: Snapshot) {
     if (snapshot?.scrollToLastEvent) {
       $(window).stop().scrollTo(document.body.scrollHeight, 500);
     } else if (snapshot?.referenceFunc) {
