@@ -115,20 +115,21 @@ export default class Main extends React.Component<Props, State> {
         method: 'GET',
       })
       .done((data: Match) => {
-        if (_.isEmpty(data.events)) {
-          return;
+        let newEvents: MatchEvent[] | undefined;
+
+        if (!_.isEmpty(data.events)) {
+          const startEventId = data.events[0]?.id ?? 0;
+
+          newEvents = _.dropRightWhile(this.state.events, (e) => e.id >= startEventId)
+            .concat(data.events)
+            .slice(-Main.MAXIMUM_EVENTS);
         }
 
-        const startEventId = data.events[0]?.id ?? 0;
-
-        const newEvents = _.dropRightWhile(this.state.events, (e) => e.id >= startEventId)
-          .concat(data.events)
-          .slice(-Main.MAXIMUM_EVENTS);
         const newUsers = this.newUsersHash(data.users);
 
         this.setState({
           currentGameId: data.current_game_id,
-          events: newEvents,
+          events: newEvents ?? this.state.events,
           latestEventId: data.latest_event_id,
           match: data.match,
           users: newUsers,
@@ -158,17 +159,18 @@ export default class Main extends React.Component<Props, State> {
         method: 'GET',
       })
       .done((data: Match) => {
-        if (_.isEmpty(data.events)) {
-          return;
+        let newEvents: MatchEvent[] | undefined;
+
+        if (!_.isEmpty(data.events)) {
+          newEvents = data.events.concat(this.state.events)
+            .slice(0, Main.MAXIMUM_EVENTS);
         }
 
-        const newEvents = data.events.concat(this.state.events)
-          .slice(0, Main.MAXIMUM_EVENTS);
         const newUsers = this.newUsersHash(data.users);
 
         this.setState({
           currentGameId: data.current_game_id,
-          events: newEvents,
+          events: newEvents ?? this.state.events,
           latestEventId: data.latest_event_id,
           users: newUsers,
         });
