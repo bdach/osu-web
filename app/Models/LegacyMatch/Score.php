@@ -15,7 +15,7 @@ use App\Models\Traits\Scoreable;
  * @property int $countgeki
  * @property int $countkatu
  * @property int $countmiss
- * @property int|null $enabled_mods
+ * @property string[] $enabled_mods
  * @property int $frame
  * @property Game $game
  * @property int $game_id

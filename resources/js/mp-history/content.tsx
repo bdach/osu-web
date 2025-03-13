@@ -168,10 +168,10 @@ export default class Content extends React.PureComponent<Props> {
     }
 
     for (const score of game.scores) {
-      if (!score.match.pass) {
+      if (!score.passed) {
         continue;
       }
-      scores[score.match.team] += score.score;
+      scores[score.team] += score.total_score;
     }
 
     return this.scoresCache[game.id] = scores;

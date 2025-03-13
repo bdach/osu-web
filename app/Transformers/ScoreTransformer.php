@@ -30,6 +30,7 @@ class ScoreTransformer extends TransformerAbstract
     ];
 
     const TYPE_LEGACY = 'legacy';
+    const TYPE_LEGACY_MATCH_TO_SOLO = 'legacy-match-to-solo';
     const TYPE_SOLO = 'solo';
 
     // TODO: user include is deprecated.
@@ -77,6 +78,9 @@ class ScoreTransformer extends TransformerAbstract
         switch ($type) {
             case static::TYPE_LEGACY:
                 $this->transformFunction = 'transformLegacy';
+                break;
+            case static::TYPE_LEGACY_MATCH_TO_SOLO:
+                $this->transformFunction = 'transformLegacyMatchToSolo';
                 break;
             case static::TYPE_SOLO:
                 $this->transformFunction = 'transformSolo';
@@ -138,8 +142,31 @@ class ScoreTransformer extends TransformerAbstract
             // TODO: remove this redundant field sometime after 2024-02
             'replay' => $hasReplay,
         ];
+    }
 
-        return $ret;
+    public function transformLegacyMatchToSolo(LegacyMatch\Score $score)
+    {
+        return [
+            'accuracy' => $score->accuracy(),
+            'beatmap_id' => $score->game->beatmap_id,
+            'ended_at' => $score->game->end_time,
+            'has_replay' => false,
+            'id' => $score->getKey(), // bit of a dangerous game but nothing better to use?
+            'legacy_perfect' => $score->perfect,
+            'legacy_total_score' => $score->score,
+            'max_combo' => $score->maxcombo,
+            'mods' => array_map(fn ($acronym) => ['acronym' => $acronym], $score->enabled_mods),
+            'passed' => $score->pass,
+            'rank' => $score->rank,
+            'ruleset_id' => $score->game->play_mode,
+            'started_at' => $score->game->start_time,
+            'statistics' => $score->getSoloStatistics(),
+            'total_score' => $score->score,
+            'user_id' => $score->user_id,
+            // additional required fields that aren't really on `SoloScore`
+            'slot' => $score->slot,
+            'team' => $score->team,
+        ];
     }
 
     public function transformLegacy(LegacyMatch\Score|ScoreModel|SoloScore $score)

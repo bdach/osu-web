@@ -7,10 +7,11 @@ import { route } from 'laroute';
 import * as React from 'react';
 import { formatNumber } from 'utils/html';
 import { trans } from 'utils/lang';
-import { MatchScore, MatchScoreStatistics } from '../interfaces/match-json';
-import Ruleset from '../interfaces/ruleset';
+import { MatchScore } from '../interfaces/match-json';
+import Ruleset, { rulesets } from '../interfaces/ruleset';
 import UserJson from '../interfaces/user-json';
 import { classWithModifiers } from '../utils/css';
+import { attributeDisplayTotals } from '../utils/score-helper';
 
 interface Props {
   mode: Ruleset;
@@ -20,15 +21,16 @@ interface Props {
 
 export default function Score(props: Props) {
   const firstRow = ['combo', 'accuracy', 'score'];
-  const secondRow = ['count_geki', 'count_300', 'count_katu', 'count_100', 'count_50', 'count_miss'];
 
   const user = props.users[props.score.user_id];
+  const ruleset = rulesets[props.score.ruleset_id];
+  const totals = attributeDisplayTotals(ruleset, props.score);
 
   return (
     <div className={'mp-history-game__player-score mp-history-player-score'}>
       <div
         className={'mp-history-player-score__shapes'}
-        style={{ backgroundImage: `url(/images/layout/mp-history/shapes-team-${props.score.match.team}.svg)` }} />
+        style={{ backgroundImage: `url(/images/layout/mp-history/shapes-team-${props.score.team}.svg)` }} />
       <div className={'mp-history-player-score__main'}>
         <div className={'mp-history-player-score__info-box mp-history-player-score__info-box--user'}>
           <div className={'mp-history-player-score__username-box'}>
@@ -38,7 +40,7 @@ export default function Score(props: Props) {
               {user.username}
             </a>
 
-            {!props.score.match.pass
+            {!props.score.passed
               ? <span className={'mp-history-player-score__failed'}>{trans('matches.match.failed')}</span>
               : null}
           </div>
@@ -50,7 +52,7 @@ export default function Score(props: Props) {
         <div className={classWithModifiers('mp-history-player-score__info-box', ['stats'])}>
           <div className={classWithModifiers('mp-history-player-score__stat-row', ['first'])}>
             <div className={'mp-history-player-score__mods'}>
-              {props.score.mods.map((mod) => (<Mod key={mod} mod={{ acronym: mod }} />))}
+              {props.score.mods.map((mod) => (<Mod key={mod.acronym} mod={mod} />))}
             </div>
             {firstRow.map((m) => {
               let modifier = 'medium';
@@ -67,7 +69,7 @@ export default function Score(props: Props) {
 
                 case 'score':
                   modifier = 'large';
-                  value = formatNumber(props.score.score);
+                  value = formatNumber(props.score.total_score);
                   break;
               }
 
@@ -83,18 +85,12 @@ export default function Score(props: Props) {
           </div>
 
           <div className={'mp-history-player-score__stat-row'}>
-            {secondRow.map((m) => {
-              if (props.mode !== 'mania' && (m === 'count_geki' || m === 'count_katu')) {
-                return null;
-              }
-
-              return (
-                <div key={m} className={classWithModifiers('mp-history-player-score__stat', ['small'])}>
-                  <span className={classWithModifiers('mp-history-player-score__stat-label', ['large'])}>{trans(`common.score_count.${m}`)}</span>
-                  <span className={classWithModifiers('mp-history-player-score__stat-number', ['small'])}>{formatNumber(props.score.statistics[m as keyof MatchScoreStatistics])}</span>
-                </div>
-              );
-            })}
+            {totals.map((stat) => (
+              <div key={stat.key} className={classWithModifiers('mp-history-player-score__stat', ['small'])}>
+                <span className={classWithModifiers('mp-history-player-score__stat-label', ['large'])}>{stat.label}</span>
+                <span className={classWithModifiers('mp-history-player-score__stat-number', ['small'])}>{formatNumber(stat.total)}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

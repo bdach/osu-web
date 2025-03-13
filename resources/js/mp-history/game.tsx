@@ -36,7 +36,7 @@ export default function Game(props: Props) {
 
   let sortedScores = game.scores.map((m) => {
     const sortedScore = m as SortedScore;
-    sortedScore.teamRank = m.match.team === winningTeam ? 1 : 2;
+    sortedScore.teamRank = m.team === winningTeam ? 1 : 2;
     return sortedScore;
   });
 
@@ -51,7 +51,7 @@ export default function Game(props: Props) {
       <div className={classWithModifiers('mp-history-game__player-scores', showTeams ? [] : ['no-teams'])}>
         {sortedScores.map((m) => (
           <Score
-            key={m.match.slot}
+            key={m.slot}
             mode={game.mode}
             score={m}
             users={props.users} />

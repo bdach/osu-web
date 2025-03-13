@@ -3,6 +3,7 @@
 
 import BeatmapJson from './beatmap-json';
 import Ruleset from './ruleset';
+import SoloScoreJson from './solo-score-json';
 import UserJson from './user-json';
 
 export interface MatchDetails {
@@ -68,28 +69,8 @@ export interface MatchGame {
 }
 
 export interface MatchScoreDetails {
-  pass: boolean;
   slot: number;
   team: 'none' | 'blue' | 'red';
 }
 
-// TODO: basically none of anything below this should exist, and is only transitory
-// while the models are worked into a uniform shape (SoloScoreJson, most likely)
-export interface MatchScoreStatistics {
-  count_100: number;
-  count_300: number;
-  count_50: number;
-  count_geki: number;
-  count_katu: number;
-  count_miss: number;
-}
-
-export interface MatchScore {
-  accuracy: number;
-  match: MatchScoreDetails;
-  max_combo: number;
-  mods: [string];
-  score: number;
-  statistics: MatchScoreStatistics;
-  user_id: number;
-}
+export type MatchScore = SoloScoreJson & MatchScoreDetails;

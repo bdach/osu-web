@@ -167,6 +167,46 @@ trait Scoreable
         }
     }
 
+    public function getSoloStatistics()
+    {
+        switch ($this->getMode()) {
+            case 'osu':
+                return [
+                    'great' => $this->count300,
+                    'ok' => $this->count100,
+                    'meh' => $this->count50,
+                    'miss' => $this->countmiss,
+                ];
+
+            case 'taiko':
+                return [
+                    'great' => $this->count300,
+                    'ok' => $this->count100,
+                    'miss' => $this->countmiss,
+                    'large_bonus' => $this->countgeki + $this->countkatu,
+                ];
+
+            case 'fruits':
+                return [
+                    'great' => $this->count300,
+                    'large_tick_hit' => $this->count100,
+                    'small_tick_hit' => $this->count50,
+                    'miss' => $this->countmiss,
+                    'small_tick_miss' => $this->countkatu,
+                ];
+
+            case 'mania':
+                return [
+                    'perfect' => $this->countgeki,
+                    'great' => $this->count300,
+                    'good' => $this->countkatu,
+                    'ok' => $this->count100,
+                    'meh' => $this->count50,
+                    'miss' => $this->countmiss,
+                ];
+        }
+    }
+
     private function shouldHaveHiddenRank(): bool
     {
         foreach ($this->enabled_mods as $mod) {
