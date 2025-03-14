@@ -92,4 +92,46 @@ class LegacyMatch extends Model
 
         return $players;
     }
+
+    public function searchEvents($params)
+    {
+        $after = $params['after'] ?? null;
+        $before = $params['before'] ?? null;
+        $limit = \Number::clamp($params['limit'] ?? 100, 1, 101);
+
+        $events = $this->events()
+            ->with([
+                'game.beatmap.beatmapset',
+                'game.scores' => fn ($q) => $q->default(),
+            ])->limit($limit);
+
+        if (isset($after)) {
+            $events
+                ->where('event_id', '>', $after)
+                ->orderBy('event_id', 'ASC');
+        } else {
+            if (isset($before)) {
+                $events->where('event_id', '<', $before);
+            }
+
+            $events->orderBy('event_id', 'DESC');
+            $reverseOrder = true;
+        }
+
+        $events = $events->get();
+        foreach ($events as $event) {
+            $game = $event->game;
+            if ($game !== null) {
+                foreach ($game->scores as $score) {
+                    $score->setRelation('game', $game);
+                }
+            }
+        }
+
+        if ($reverseOrder ?? false) {
+            $events = $events->reverse();
+        }
+
+        return $events;
+    }
 }

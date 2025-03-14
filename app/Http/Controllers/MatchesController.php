@@ -6,6 +6,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LegacyMatch\LegacyMatch;
+use App\Models\Multiplayer\Room;
 use App\Models\User;
 use App\Transformers\LegacyMatch\EventTransformer;
 use App\Transformers\UserCompactTransformer;
@@ -17,7 +18,7 @@ class MatchesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('require-scopes:public', ['only' => ['index', 'show']]);
+        $this->middleware('require-scopes:public', ['only' => ['index', 'show', 'showLazer']]);
     }
 
     /**
@@ -129,11 +130,10 @@ class MatchesController extends Controller
         $match = LegacyMatch::findOrFail($id);
 
         $params = get_params(request()->all(), null, ['after:int', 'before:int', 'limit:int']);
-        $params['match'] = $match;
 
         priv_check('MatchView', $match)->ensureCan();
 
-        $eventsJson = $this->eventsJson($params);
+        $eventsJson = $this->eventsJson($match, $params);
 
         if (is_json_request()) {
             return $eventsJson;
@@ -142,45 +142,18 @@ class MatchesController extends Controller
         }
     }
 
-    private function eventsJson($params)
+    public function showLazer($id)
     {
-        $match = $params['match'];
-        $after = $params['after'] ?? null;
-        $before = $params['before'] ?? null;
-        $limit = \Number::clamp($params['limit'] ?? 100, 1, 101);
+        // TODO: check if this is really a realtime room, redirect back to playlist view if not
+        $match = Room::findOrFail($id);
+        $eventsJson = '{}';
 
-        $events = $match->events()
-            ->with([
-                'game.beatmap.beatmapset',
-                'game.scores' => fn ($q) => $q->default(),
-            ])->limit($limit);
+        return ext_view('matches.index', compact('match', 'eventsJson'));
+    }
 
-        if (isset($after)) {
-            $events
-                ->where('event_id', '>', $after)
-                ->orderBy('event_id', 'ASC');
-        } else {
-            if (isset($before)) {
-                $events->where('event_id', '<', $before);
-            }
-
-            $events->orderBy('event_id', 'DESC');
-            $reverseOrder = true;
-        }
-
-        $events = $events->get();
-        foreach ($events as $event) {
-            $game = $event->game;
-            if ($game !== null) {
-                foreach ($game->scores as $score) {
-                    $score->setRelation('game', $game);
-                }
-            }
-        }
-
-        if ($reverseOrder ?? false) {
-            $events = $events->reverse();
-        }
+    private function eventsJson($match, $params)
+    {
+        $events = $match->searchEvents($params);
 
         $users = User::with('country')->whereIn('user_id', $this->usersFromEvents($events))->get();
 

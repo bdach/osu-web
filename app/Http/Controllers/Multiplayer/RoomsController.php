@@ -170,6 +170,8 @@ class RoomsController extends Controller
             return ujs_redirect(route('daily-challenge.show', DailyChallengeController::roomId($room)));
         }
 
+        // TODO: redirect to match history page for realtime rooms
+
         $playlistItemsQuery = $room->playlist();
         if ($room->isRealtime()) {
             $playlistItemsQuery->whereHas('scoreLinks');
