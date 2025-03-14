@@ -733,6 +733,21 @@ class Room extends Model
         return $this->userHighScores()->forRanking()->with(['user.country', 'user.team']);
     }
 
+    public function events()
+    {
+        return []; // TODO
+    }
+
+    public function searchEvents()
+    {
+        return []; // TODO
+    }
+
+    public function currentGame()
+    {
+        return $this->findAndSetCurrentPlaylistItem(); // TODO: there is probably a better way?
+    }
+
     private function assertHostRoomAllowance()
     {
         $query = static::active()->startedBy($this->host);

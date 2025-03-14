@@ -6,6 +6,7 @@
 namespace App\Transformers\LegacyMatch;
 
 use App\Models\LegacyMatch\LegacyMatch;
+use App\Models\Multiplayer\Room;
 use App\Transformers\TransformerAbstract;
 
 class LegacyMatchTransformer extends TransformerAbstract
@@ -14,14 +15,23 @@ class LegacyMatchTransformer extends TransformerAbstract
         'events',
     ];
 
-    public function transform(LegacyMatch $match)
+    public function transform(LegacyMatch|Room $match)
     {
-        return [
-            'id' => $match->match_id,
-            'start_time' => json_time($match->start_time),
-            'end_time' => json_time($match->end_time),
-            'name' => $match->name,
-        ];
+        if ($match instanceof LegacyMatch) {
+            return [
+                'id' => $match->match_id,
+                'start_time' => json_time($match->start_time),
+                'end_time' => json_time($match->end_time),
+                'name' => $match->name,
+            ];
+        } else {
+            return [
+                'id' => $match->id,
+                'start_time' => json_time($match->starts_at),
+                'end_time' => json_time($match->ends_at),
+                'name' => $match->name,
+            ];
+        }
     }
 
     public function includeEvents(LegacyMatch $match)

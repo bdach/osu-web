@@ -146,9 +146,16 @@ class MatchesController extends Controller
     {
         // TODO: check if this is really a realtime room, redirect back to playlist view if not
         $match = Room::findOrFail($id);
-        $eventsJson = '{}';
 
-        return ext_view('matches.index', compact('match', 'eventsJson'));
+        $params = get_params(request()->all(), null, ['after:int', 'before:int', 'limit:int']);
+
+        $eventsJson = $this->eventsJson($match, $params);
+
+        if (is_json_request()) {
+            return $eventsJson;
+        } else {
+            return ext_view('matches.index', compact('match', 'eventsJson'));
+        }
     }
 
     private function eventsJson($match, $params)
@@ -169,10 +176,12 @@ class MatchesController extends Controller
             ['game.beatmap.beatmapset', 'game.scores.match']
         );
 
-        $eventEndIds = $match
-            ->events()
-            ->selectRaw('MIN(event_id) first_event_id, MAX(event_id) latest_event_id')
-            ->first();
+        if ($match instanceof LegacyMatch) {
+            $eventEndIds = $match
+                ->events()
+                ->selectRaw('MIN(event_id) first_event_id, MAX(event_id) latest_event_id')
+                ->first();
+        }
 
         return [
             'match' => json_item($match, 'LegacyMatch\LegacyMatch'),
