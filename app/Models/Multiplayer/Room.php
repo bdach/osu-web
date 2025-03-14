@@ -746,8 +746,8 @@ class Room extends Model
 
         $events = $this->events()
             ->with([
-                'playlistItem.beatmap.beatmapset',
-                'playlistItem.scoreLinks',
+                'game.beatmap.beatmapset',
+                'game.scoreLinks.score',
             ])->limit($limit);
 
         if (isset($after)) {

@@ -17,12 +17,13 @@ interface Props {
 
 export default function Event(props: Props) {
   const icons = {
-    'host-changed': ['fas fa-exchange-alt'],
-    'match-created': ['fas fa-plus'],
-    'match-disbanded': ['fas fa-times'],
-    'player-joined': ['fas fa-arrow-right', 'far fa-circle'],
-    'player-kicked': ['fas fa-arrow-left', 'fas fa-ban'],
-    'player-left': ['fas fa-arrow-left', 'far fa-circle'],
+    game_aborted: ['fas fa-ban'],
+    host_changed: ['fas fa-exchange-alt'],
+    player_joined: ['fas fa-arrow-right', 'far fa-circle'],
+    player_kicked: ['fas fa-arrow-left', 'fas fa-ban'],
+    player_left: ['fas fa-arrow-left', 'far fa-circle'],
+    room_created: ['fas fa-plus'],
+    room_disbanded: ['fas fa-times'],
   };
 
   const user = props.users[props.event.user_id];
@@ -31,11 +32,11 @@ export default function Event(props: Props) {
 
   let userLink: string = '';
 
-  if (user !== null && event_type !== 'match-disbanded') {
+  if (user != null && event_type !== 'room_disbanded') {
     userLink = linkHtml(route('users.show', { user: user.id }), user.username, { classNames: ['mp-history-event__username'] });
   }
 
-  if (event_type === 'other') {
+  if (event_type === 'other' || event_type === 'game_started') {
     return null;
   }
 
@@ -44,11 +45,11 @@ export default function Event(props: Props) {
       <div className={'mp-history-event__time'}>
         <TimeWithTooltip dateTime={props.event.timestamp} format={'LTS'} />
       </div>
-      <div className={classWithModifiers('mp-history-event__type', [event_type])}>
+      <div className={classWithModifiers('mp-history-event__type', [event_type.replace('_', '-')])}>
         {icons[event_type].map((m) => <i key={m} className={m} />)}
       </div>
       <div dangerouslySetInnerHTML={{
-        __html: trans(`matches.match.events.${event_type}${user !== null ? '' : '-no-user'}`, { user: userLink }),
+        __html: trans(`matches.match.events.${event_type.replace('_', '-')}${user !== null ? '' : '-no-user'}`, { user: userLink }),
       }}
       className={'mp-history-event__text'} />
     </div>

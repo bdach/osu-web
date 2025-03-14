@@ -92,7 +92,7 @@ export default class Content extends React.PureComponent<Props> {
           </div>
           : null}
         {this.props.events?.map((event) => {
-          if (event.detail.type === 'other') {
+          if (event.detail.type === 'other' || event.detail.type === 'game_started') {
             if (event.game == null || (event.game.end_time == null && event.game.id !== this.props.currentGameId)) {
               return null;
             }

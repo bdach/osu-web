@@ -5,6 +5,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LegacyMatch\Game;
 use App\Models\LegacyMatch\LegacyMatch;
 use App\Models\Multiplayer\Room;
 use App\Models\User;
@@ -173,7 +174,7 @@ class MatchesController extends Controller
         $events = json_collection(
             $events,
             new EventTransformer(),
-            ['game.beatmap.beatmapset', 'game.scores.match']
+            ['game.beatmap.beatmapset', 'game.scores']
         );
 
         if ($match instanceof LegacyMatch) {
@@ -203,7 +204,9 @@ class MatchesController extends Controller
             }
 
             if ($event->game) {
-                foreach ($event->game->scores as $score) {
+                $scores = $event->game instanceof Game ? $event->game->scores : $event->game->scoreLinks;
+
+                foreach ($scores as $score) {
                     $userIds[] = $score->user_id;
                 }
             }

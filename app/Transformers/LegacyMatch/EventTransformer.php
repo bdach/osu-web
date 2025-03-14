@@ -6,6 +6,7 @@
 namespace App\Transformers\LegacyMatch;
 
 use App\Models\LegacyMatch\Event;
+use App\Models\Multiplayer\RoomEvent;
 use App\Transformers\TransformerAbstract;
 use App\Transformers\UserCompactTransformer;
 
@@ -16,24 +17,35 @@ class EventTransformer extends TransformerAbstract
         'game',
     ];
 
-    public function transform(Event $event)
+    public function transform(Event|RoomEvent $event)
     {
-        return [
-            'id' => $event->event_id,
-            'detail' => $event->detail,
-            'timestamp' => json_time($event->timestamp),
-            'user_id' => $event->user_id,
-        ];
+        if ($event instanceof Event) {
+            return [
+                'id' => $event->event_id,
+                'detail' => $event->detail,
+                'timestamp' => json_time($event->timestamp),
+                'user_id' => $event->user_id,
+            ];
+        } else {
+            return [
+                'id' => $event->event_id,
+                'detail' => [
+                    'type' => $event->event_type,
+                ],
+                'timestamp' => $event->timestamp,
+                'user_id' => $event->user_id,
+            ];
+        }
     }
 
-    public function includeUser(Event $event)
+    public function includeUser(Event|RoomEvent $event)
     {
         if ($event->user) {
             return $this->item($event->user, new UserCompactTransformer());
         }
     }
 
-    public function includeGame(Event $event)
+    public function includeGame(Event|RoomEvent $event)
     {
         if ($event->game) {
             return $this->item($event->game, new GameTransformer());

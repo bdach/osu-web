@@ -105,7 +105,7 @@ export default class Main extends React.Component<Props, State> {
     this.setState({ loadingNext: true });
 
     $.ajax(
-      route('matches.show', { match: this.state.match.id }),
+      route('matches.show', { match: this.state.match.id }), // TODO: needs to pass lazer arg
       {
         data: {
           after: this.minNextEventId(),
@@ -149,7 +149,7 @@ export default class Main extends React.Component<Props, State> {
     this.setState({ loadingPrevious: true });
 
     $.ajax(
-      route('matches.show', { match: this.state.match.id }),
+      route('matches.show', { match: this.state.match.id }), // TODO: needs to pass lazer arg
       {
         data: {
           before: this.state.events[0]?.id,

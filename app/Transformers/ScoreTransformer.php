@@ -249,10 +249,11 @@ class ScoreTransformer extends TransformerAbstract
 
     public function includeMatch(LegacyMatch\Score $score)
     {
+        // TODO: this is broken and can't work with new scores
+        // lift all of this state to game level
         return $this->primitive([
             'slot' => $score->slot,
             'team' => $score->team,
-            'pass' => $score->pass,
         ]);
     }
 

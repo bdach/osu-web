@@ -11,22 +11,24 @@ use App\Models\User;
 /**
  * @property int $event_id
  * @property string $event_type
+ * @property PlaylistItem|null $game
  * @property int|null $playlist_item_id
  * @property int $room_id
  * @property \Carbon\Carbon $timestamp
- * @property int|null $user
+ * @property User|null $user
+ * @property int|null $user_id
  */
 class RoomEvent extends Model
 {
     const EVENT_TYPES = [
-        'player-left',
-        'player-joined',
-        'player-kicked',
-        'room-created',
-        'room-disbanded',
-        'game-started',
-        'game-aborted',
-        'host-changed',
+        'player_left',
+        'player_joined',
+        'player_kicked',
+        'room_created',
+        'room_disbanded',
+        'game_started',
+        'game_aborted',
+        'host_changed',
     ];
 
     protected $table = 'multiplayer_room_events';
@@ -36,9 +38,9 @@ class RoomEvent extends Model
         return $this->belongsTo(Room::class);
     }
 
-    public function playlistItem()
+    public function game()
     {
-        return $this->belongsTo(PlaylistItem::class);
+        return $this->belongsTo(PlaylistItem::class, 'playlist_item_id');
     }
 
     public function user()
