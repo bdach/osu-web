@@ -746,8 +746,8 @@ class Room extends Model
 
         $events = $this->events()
             ->with([
-                'playlist_item.beatmap.beatmapset',
-                'playlist_item.score_links' => fn ($q) => $q->default(),
+                'playlistItem.beatmap.beatmapset',
+                'playlistItem.scoreLinks',
             ])->limit($limit);
 
         if (isset($after)) {
@@ -768,7 +768,7 @@ class Room extends Model
             $playlistItem = $event->playlistItem;
             if ($playlistItem !== null) {
                 foreach ($playlistItem->scoreLinks as $score) {
-                    $score->setRelation('playlist_item', $playlistItem);
+                    $score->setRelation('playlistItem', $playlistItem);
                 }
             }
         }
