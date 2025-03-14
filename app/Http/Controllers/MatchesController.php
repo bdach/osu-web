@@ -158,7 +158,7 @@ class MatchesController extends Controller
         }
     }
 
-    private function eventsJson($match, $params)
+    private function eventsJson(LegacyMatch|Room $match, $params)
     {
         $events = $match->searchEvents($params);
 

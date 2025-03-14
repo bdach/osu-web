@@ -735,12 +735,49 @@ class Room extends Model
 
     public function events()
     {
-        return []; // TODO
+        return $this->hasMany(RoomEvent::class);
     }
 
     public function searchEvents()
     {
-        return []; // TODO
+        $after = $params['after'] ?? null;
+        $before = $params['before'] ?? null;
+        $limit = \Number::clamp($params['limit'] ?? 100, 1, 101);
+
+        $events = $this->events()
+            ->with([
+                'playlist_item.beatmap.beatmapset',
+                'playlist_item.score_links' => fn ($q) => $q->default(),
+            ])->limit($limit);
+
+        if (isset($after)) {
+            $events
+                ->where('event_id', '>', $after)
+                ->orderBy('event_id', 'ASC');
+        } else {
+            if (isset($before)) {
+                $events->where('event_id', '<', $before);
+            }
+
+            $events->orderBy('event_id', 'DESC');
+            $reverseOrder = true;
+        }
+
+        $events = $events->get();
+        foreach ($events as $event) {
+            $playlistItem = $event->playlistItem;
+            if ($playlistItem !== null) {
+                foreach ($playlistItem->scoreLinks as $score) {
+                    $score->setRelation('playlist_item', $playlistItem);
+                }
+            }
+        }
+
+        if ($reverseOrder ?? false) {
+            $events = $events->reverse();
+        }
+
+        return $events;
     }
 
     public function currentGame()
