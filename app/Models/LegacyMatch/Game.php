@@ -17,7 +17,7 @@ use App\Models\Beatmap;
  * @property int|null $match_id
  * @property int|null $match_type
  * @property mixed $mode
- * @property int|null $mods
+ * @property string[]|null $mods
  * @property int|null $play_mode
  * @property \Illuminate\Database\Eloquent\Collection $scores Score
  * @property int|null $scoring_type

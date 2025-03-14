@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 import BeatmapJson from './beatmap-json';
+import ModJson from './mod-json';
 import Ruleset from './ruleset';
 import SoloScoreJson from './solo-score-json';
 import UserJson from './user-json';
@@ -61,7 +62,7 @@ export interface MatchGame {
   end_time?: string;
   id: number;
   mode: Ruleset;
-  mods: string[]; // TODO: use ModJson
+  mods: ModJson[];
   scores: MatchScore[];
   scoring_type: ScoringType;
   start_time: string;

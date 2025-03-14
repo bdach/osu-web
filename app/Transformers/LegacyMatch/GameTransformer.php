@@ -28,7 +28,7 @@ class GameTransformer extends TransformerAbstract
             'mode_int' => $game->play_mode,
             'scoring_type' => $game->scoring_type,
             'team_type' => $game->team_type,
-            'mods' => $game->mods,
+            'mods' => array_map(fn ($acronym) => ['acronym' => $acronym], $game->mods),
         ];
     }
 

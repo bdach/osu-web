@@ -57,7 +57,7 @@ export default function GameHeader(props: Props) {
         <h2 className={classWithModifiers('mp-history-game__metadata', ['artist'])}>{getArtist(props.beatmapset)}</h2>
       </div>
       <div className={'mp-history-game__mods'}>
-        {props.game.mods.map((mod) => (<Mod key={mod} mod={{ acronym: mod }} />))}
+        {props.game.mods.map((mod) => (<Mod key={mod.acronym} mod={mod} />))}
       </div>
       <div
         className={'mp-history-game__team-type'}
