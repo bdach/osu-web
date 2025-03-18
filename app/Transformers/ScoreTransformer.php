@@ -250,11 +250,13 @@ class ScoreTransformer extends TransformerAbstract
             return $this->primitive([
                 'slot' => $score->slot,
                 'team' => $score->team,
+                'pass' => $score->pass,
             ]);
         } else {
             $teams = $score->playlistItem->roomEvent->room_state?->teams;
             return $this->primitive([
                 'team' => $teams[$score->user_id] ?? 'none',
+                'pass' => true, // TODO: to be discussed w/ tournament peoples
             ]);
         }
     }

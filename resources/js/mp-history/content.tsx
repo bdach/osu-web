@@ -168,7 +168,7 @@ export default class Content extends React.PureComponent<Props> {
     }
 
     for (const score of game.scores) {
-      if (!score.passed || score.match?.team == null || score.match.team === 'none') {
+      if (!score.match?.pass || score.match?.team == null || score.match.team === 'none') {
         continue;
       }
       scores[score.match.team] += score.total_score;
