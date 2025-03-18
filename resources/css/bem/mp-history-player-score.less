@@ -21,7 +21,7 @@
   &__main {
     flex-grow: 1;
 
-    padding: 5px 20px 15px 7.5px;
+    padding: 10px 20px 10px 5px;
 
     display: flex;
     flex-direction: column;
@@ -29,6 +29,7 @@
 
     @media @desktop {
       flex-direction: row;
+      padding: 10px 20px;
     }
   }
 
@@ -40,11 +41,8 @@
 
     &--user {
       align-items: flex-start;
-      flex-direction: row;
-
-      @media @desktop {
-        flex-direction: column;
-      }
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     &--stats {
@@ -60,24 +58,42 @@
   &__username-box {
     display: flex;
     align-items: baseline;
-    flex-direction: column;
-
+    flex-direction: row;
     padding-bottom: 5px;
+  }
 
-    @media @desktop {
-      flex-direction: row;
-    }
+  &__username-flag {
+    padding-right: 10px;
+    align-self: center;
   }
 
   &__username {
     font-weight: 700;
     font-size: 18px;
 
-    padding-right: 5px;
+    padding-right: 10px;
+  }
 
-    @media @desktop {
-      padding-right: 20px;
-    }
+  &__player-settings {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &__player-style {
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+    gap: 5px;
+  }
+
+  &__player-beatmap-link {
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  &__mods {
+    padding-right: 10px;
+    display: flex;
   }
 
   &__stat-row {
@@ -85,9 +101,6 @@
       margin-right: 10px;
       @media @desktop {
         margin: 2px;
-      }
-      @media (min-width: @width) {
-        width: 530px;
       }
     }
 
@@ -97,6 +110,8 @@
     align-items: baseline;
     flex-direction: column;
     flex-grow: 1;
+    flex-wrap: wrap;
+    max-height: 60px;
 
     @media @desktop {
       flex-direction: row;
@@ -108,12 +123,7 @@
     color: @osu-colour-red-1;
     font-weight: 700;
 
-    padding-right: 20px;
-  }
-
-  &__mods {
-    padding-right: 20px;
-    display: flex;
+    padding-right: 10px;
   }
 
   &__stat {
@@ -121,7 +131,7 @@
     align-items: baseline;
     justify-content: flex-end;
 
-    padding-right: 40px;
+    padding-right: 30px;
 
     &--small {
       padding-right: 20px;
@@ -138,8 +148,9 @@
 
   &__stat-label {
     font-weight: 600;
+    text-transform: uppercase;
 
-    padding-right: 3px;
+    padding-right: 8px;
 
     color: @osu-colour-c2;
 

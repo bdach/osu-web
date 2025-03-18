@@ -62,5 +62,6 @@ return [
             'combo' => 'Highest Combo',
             'scorev2' => 'Score V2',
         ],
+        'freestyle' => 'Freestyle',
     ],
 ];

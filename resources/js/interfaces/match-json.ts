@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 import BeatmapJson from './beatmap-json';
+import BeatmapsetJson from './beatmapset-json';
 import ModJson from './mod-json';
 import Ruleset from './ruleset';
 import SoloScoreJson from './solo-score-json';
@@ -58,9 +59,8 @@ export type TeamType =
   | 'team-vs'
   | 'tag-team-vs';
 
-export interface MatchGame {
-  beatmap?: BeatmapJson;
-  beatmap_id: number;
+interface MatchGameBase {
+  beatmapset?: BeatmapsetJson;
   end_time?: string;
   id: number;
   mode: Ruleset;
@@ -70,3 +70,16 @@ export interface MatchGame {
   start_time: string;
   team_type: TeamType;
 }
+
+interface StandardGame {
+  beatmap?: BeatmapJson;
+  beatmap_id: number;
+  freestyle: false;
+  mode: Ruleset;
+}
+
+interface FreestyleGame {
+  freestyle: true;
+}
+
+export type MatchGame = MatchGameBase & (StandardGame | FreestyleGame);

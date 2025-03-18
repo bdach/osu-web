@@ -46,14 +46,15 @@ export default function Game(props: Props) {
   return (
     <div className={'mp-history-game'}>
       <GameHeader
-        beatmap={game.beatmap ?? deletedBeatmap(game.mode)}
-        beatmapset={game.beatmap?.beatmapset ?? deletedBeatmapset()}
+        beatmap={game.freestyle ? undefined : (game.beatmap ?? deletedBeatmap(game.mode))}
+        beatmapset={game.beatmapset ?? deletedBeatmapset()}
         game={game} />
       <div className={classWithModifiers('mp-history-game__player-scores', showTeams ? [] : ['no-teams'])}>
         {sortedScores.map((m) => (
           <Score
             key={m.match?.slot ?? m.user_id}
-            mode={game.mode}
+            beatmapset={game.beatmapset}
+            freestyle={game.freestyle}
             score={m}
             users={props.users} />
         ))}

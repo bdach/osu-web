@@ -14,7 +14,7 @@ import { MatchGame } from '../interfaces/match-json';
 import { classWithModifiers } from '../utils/css';
 
 interface Props {
-  beatmap: BeatmapJson;
+  beatmap?: BeatmapJson;
   beatmapset: BeatmapsetJson;
   game: MatchGame;
 }
@@ -23,15 +23,22 @@ export default function GameHeader(props: Props) {
   const timeFormat = 'LTS';
 
   let title = getTitle(props.beatmapset);
-  const version = props.beatmap.version;
-  if (version) {
+  const version = props.beatmap?.version;
+  if (version != null) {
     title += ` [${version}]`;
+  }
+
+  let link = '';
+  if (props.game.freestyle) {
+    link = route('beatmapsets.show', { beatmapset: props.beatmapset.id });
+  } else if (props.beatmap != null && props.beatmap.id > 0) {
+    link = route('beatmaps.show', { beatmap: props.beatmap.id });
   }
 
   return (
     <a
       className={'mp-history-game__header'}
-      href={props.beatmap.id > 0 ? route('beatmaps.show', { beatmap: props.beatmap.id }) : ''}>
+      href={link}>
       <BeatmapsetCover
         beatmapset={props.beatmapset}
         modifiers={'full'}
@@ -49,7 +56,7 @@ export default function GameHeader(props: Props) {
             </React.Fragment>)
             : trans('matches.match.in-progress')}
         </span>
-        <span className={'mp-history-game__stat'}>{trans(`beatmaps.mode.${props.game.mode}`)}</span>
+        <span className={'mp-history-game__stat'}>{props.game.freestyle ? trans('matches.game.freestyle') : trans(`beatmaps.mode.${props.game.mode}`)}</span>
         <span className={'mp-history-game__stat'}>{trans(`matches.game.scoring-type.${props.game.scoring_type}`)}</span>
       </div>
       <div className={'mp-history-game__metadata-box'}>

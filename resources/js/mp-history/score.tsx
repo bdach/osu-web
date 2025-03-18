@@ -7,14 +7,16 @@ import { route } from 'laroute';
 import * as React from 'react';
 import { formatNumber } from 'utils/html';
 import { trans } from 'utils/lang';
-import Ruleset, { rulesets } from '../interfaces/ruleset';
+import BeatmapsetJson from '../interfaces/beatmapset-json';
+import { rulesets } from '../interfaces/ruleset';
 import SoloScoreJson from '../interfaces/solo-score-json';
 import UserJson from '../interfaces/user-json';
 import { classWithModifiers } from '../utils/css';
 import { attributeDisplayTotals } from '../utils/score-helper';
 
 interface Props {
-  mode: Ruleset;
+  beatmapset?: BeatmapsetJson;
+  freestyle: boolean;
   score: SoloScoreJson;
   users: { [userId: string]: UserJson };
 }
@@ -35,6 +37,12 @@ export default function Score(props: Props) {
         <div className={'mp-history-player-score__info-box mp-history-player-score__info-box--user'}>
           <div className={'mp-history-player-score__username-box'}>
             <a
+              className={'mp-history-player-score__username-flag'}
+              href={route('rankings', { country: user.country?.code, mode: ruleset, type: 'performance' })}>
+              <FlagCountry country={user.country} modifiers={'medium'} />
+            </a>
+
+            <a
               className={'mp-history-player-score__username'}
               href={route('users.show', { user: user.id })}>
               {user.username}
@@ -44,16 +52,22 @@ export default function Score(props: Props) {
               ? <span className={'mp-history-player-score__failed'}>{trans('matches.match.failed')}</span>
               : null}
           </div>
-          <a
-            href={route('rankings', { country: user.country?.code, mode: props.mode, type: 'performance' })}>
-            <FlagCountry country={user.country} modifiers={'medium'} />
-          </a>
-        </div>
-        <div className={classWithModifiers('mp-history-player-score__info-box', ['stats'])}>
-          <div className={classWithModifiers('mp-history-player-score__stat-row', ['first'])}>
+          <div className={'mp-history-player-score__player-settings'}>
+            {props.freestyle && props.beatmapset != null
+              ? <div className={'mp-history-player-score__player-style'}>
+                <span className={`fal fa-lg fa-extra-mode-${ruleset}`} />
+                <a className={'mp-history-player-score__player-beatmap-link'} href={route('beatmaps.show', { beatmap: props.score.beatmap_id, ruleset })}>
+                  {props.beatmapset.beatmaps?.find(b => b.id === props.score.beatmap_id)?.version}
+                </a>
+              </div>
+              : null}
             <div className={'mp-history-player-score__mods'}>
               {props.score.mods.map((mod) => (<Mod key={mod.acronym} mod={mod} />))}
             </div>
+          </div>
+        </div>
+        <div className={classWithModifiers('mp-history-player-score__info-box', ['stats'])}>
+          <div className={classWithModifiers('mp-history-player-score__stat-row', ['first'])}>
             {firstRow.map((m) => {
               let modifier = 'medium';
               let value;

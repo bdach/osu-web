@@ -9,6 +9,7 @@ use App\Models\Beatmap;
 use App\Models\LegacyMatch\Game;
 use App\Models\Multiplayer\PlaylistItem;
 use App\Transformers\BeatmapCompactTransformer;
+use App\Transformers\BeatmapsetCompactTransformer;
 use App\Transformers\ScoreTransformer;
 use App\Transformers\TransformerAbstract;
 
@@ -16,6 +17,7 @@ class GameTransformer extends TransformerAbstract
 {
     protected array $availableIncludes = [
         'beatmap',
+        'beatmapset',
         'scores',
     ];
 
@@ -44,6 +46,7 @@ class GameTransformer extends TransformerAbstract
                 'id' => $game->id,
                 'start_time' => $game->created_at,
                 'end_time' => $game->played_at,
+                'freestyle' => $game->freestyle,
                 'mode' => Beatmap::modeStr($game->ruleset_id),
                 'mode_int' => $game->ruleset_id,
                 'scoring_type' => 'score', // nothing else is supported right now
@@ -59,6 +62,15 @@ class GameTransformer extends TransformerAbstract
 
         if ($beatmap !== null) {
             return $this->item($beatmap, new BeatmapCompactTransformer());
+        }
+    }
+
+    public function includeBeatmapset(Game|PlaylistItem $game)
+    {
+        $beatmapSet = $game->beatmap?->beatmapset;
+
+        if ($beatmapSet !== null) {
+            return $this->item($beatmapSet, new BeatmapsetCompactTransformer());
         }
     }
 
