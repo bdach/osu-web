@@ -70,7 +70,7 @@ export interface MatchGame {
 export interface MatchScoreDetails {
   pass: boolean;
   slot: number;
-  team: 'blue' | 'red';
+  team: 'none' | 'blue' | 'red';
 }
 
 // TODO: basically none of anything below this should exist, and is only transitory
