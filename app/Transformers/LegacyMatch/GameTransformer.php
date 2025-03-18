@@ -34,6 +34,11 @@ class GameTransformer extends TransformerAbstract
                 'mods' => array_map(fn($acronym) => ['acronym' => $acronym], $game->mods),
             ];
         } else {
+            $typeMapping = [
+                'head_to_head' => 'head-to-head',
+                'team_versus' => 'team-vs',
+            ];
+
             return [
                 'beatmap_id' => $game->beatmap_id,
                 'id' => $game->id,
@@ -42,7 +47,7 @@ class GameTransformer extends TransformerAbstract
                 'mode' => Beatmap::modeStr($game->ruleset_id),
                 'mode_int' => $game->ruleset_id,
                 'scoring_type' => 'score', // nothing else is supported right now
-                'team_type' => str_replace('_', '-', $game->roomEvent->room_state->roomType),
+                'team_type' => $typeMapping[$game->roomEvent->room_state->roomType],
                 'mods' => $game->required_mods,
             ];
         }
@@ -66,7 +71,7 @@ class GameTransformer extends TransformerAbstract
             );
         } else {
             return $this->collection(
-                $game->scoreLinks->map(fn ($link) => $link->score),
+                $game->scoreLinks,
                 new ScoreTransformer()
             );
         }

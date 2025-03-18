@@ -7,15 +7,15 @@ import { route } from 'laroute';
 import * as React from 'react';
 import { formatNumber } from 'utils/html';
 import { trans } from 'utils/lang';
-import { MatchScore } from '../interfaces/match-json';
 import Ruleset, { rulesets } from '../interfaces/ruleset';
+import SoloScoreJson from '../interfaces/solo-score-json';
 import UserJson from '../interfaces/user-json';
 import { classWithModifiers } from '../utils/css';
 import { attributeDisplayTotals } from '../utils/score-helper';
 
 interface Props {
   mode: Ruleset;
-  score: MatchScore;
+  score: SoloScoreJson;
   users: { [userId: string]: UserJson };
 }
 
@@ -30,7 +30,7 @@ export default function Score(props: Props) {
     <div className={'mp-history-game__player-score mp-history-player-score'}>
       <div
         className={'mp-history-player-score__shapes'}
-        style={{ backgroundImage: `url(/images/layout/mp-history/shapes-team-${props.score.team}.svg)` }} />
+        style={{ backgroundImage: `url(/images/layout/mp-history/shapes-team-${props.score.match?.team ?? 'none'}.svg)` }} />
       <div className={'mp-history-player-score__main'}>
         <div className={'mp-history-player-score__info-box mp-history-player-score__info-box--user'}>
           <div className={'mp-history-player-score__username-box'}>

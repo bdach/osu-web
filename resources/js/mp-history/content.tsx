@@ -92,7 +92,7 @@ export default class Content extends React.PureComponent<Props> {
           </div>
           : null}
         {this.props.events?.map((event) => {
-          if (event.detail.type === 'other' || event.detail.type === 'game_started') {
+          if (event.detail.type === 'other' || event.detail.type === 'game-started') {
             if (event.game == null || (event.game.end_time == null && event.game.id !== this.props.currentGameId)) {
               return null;
             }
@@ -168,10 +168,10 @@ export default class Content extends React.PureComponent<Props> {
     }
 
     for (const score of game.scores) {
-      if (!score.passed) {
+      if (!score.passed || score.match?.team == null || score.match.team === 'none') {
         continue;
       }
-      scores[score.team] += score.total_score;
+      scores[score.match.team] += score.total_score;
     }
 
     return this.scoresCache[game.id] = scores;

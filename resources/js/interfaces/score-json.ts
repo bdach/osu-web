@@ -21,7 +21,7 @@ interface ScoreCurrentUserAttributesJson {
 interface Match {
   pass: boolean;
   slot: number;
-  team: number;
+  team: 'none' | 'blue' | 'red';
 }
 
 interface PpWeight {

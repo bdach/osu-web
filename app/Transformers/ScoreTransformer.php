@@ -11,7 +11,6 @@ use App\Libraries\Search\ScoreSearchParams;
 use App\Models\Beatmap;
 use App\Models\DeletedUser;
 use App\Models\LegacyMatch;
-use App\Models\Multiplayer\PlaylistItem;
 use App\Models\Multiplayer\PlaylistItemUserHighScore;
 use App\Models\Multiplayer\ScoreLink as MultiplayerScoreLink;
 use App\Models\Score\Best\Model as ScoreBest;
@@ -164,9 +163,6 @@ class ScoreTransformer extends TransformerAbstract
             'statistics' => $score->getSoloStatistics(),
             'total_score' => $score->score,
             'user_id' => $score->user_id,
-            // additional required fields that aren't really on `SoloScore`
-            'slot' => $score->slot,
-            'team' => $score->team,
         ];
     }
 
@@ -248,7 +244,7 @@ class ScoreTransformer extends TransformerAbstract
         return $this->item($score, new Score\CurrentUserAttributesTransformer());
     }
 
-    public function includeMatch(LegacyMatch\Score|PlaylistItem $score)
+    public function includeMatch(LegacyMatch\Score|MultiplayerScoreLink $score)
     {
         if ($score instanceof LegacyMatch\Score) {
             return $this->primitive([
@@ -256,7 +252,7 @@ class ScoreTransformer extends TransformerAbstract
                 'team' => $score->team,
             ]);
         } else {
-            $teams = $score->roomEvent->room_state?->teams;
+            $teams = $score->playlistItem->roomEvent->room_state?->teams;
             return $this->primitive([
                 'team' => $teams[$score->user_id] ?? 'none',
             ]);

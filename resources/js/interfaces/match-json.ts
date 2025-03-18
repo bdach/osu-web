@@ -65,15 +65,8 @@ export interface MatchGame {
   id: number;
   mode: Ruleset;
   mods: ModJson[];
-  scores: MatchScore[];
+  scores: SoloScoreJson[];
   scoring_type: ScoringType;
   start_time: string;
   team_type: TeamType;
 }
-
-export interface MatchScoreDetails {
-  slot: number;
-  team: 'none' | 'blue' | 'red';
-}
-
-export type MatchScore = SoloScoreJson & MatchScoreDetails;

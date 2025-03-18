@@ -8,15 +8,16 @@ import { formatNumber } from 'utils/html';
 import { trans, transExists } from 'utils/lang';
 import BeatmapJson from '../interfaces/beatmap-json';
 import BeatmapsetJson from '../interfaces/beatmapset-json';
-import { MatchEvent, MatchScore } from '../interfaces/match-json';
+import { MatchEvent } from '../interfaces/match-json';
 import Ruleset from '../interfaces/ruleset';
+import SoloScoreJson from '../interfaces/solo-score-json';
 import UserJson from '../interfaces/user-json';
 import { classWithModifiers } from '../utils/css';
 import { TeamScores } from './content';
 import GameHeader from './game-header';
 import Score from './score';
 
-type SortedScore = MatchScore & {
+type SortedScore = SoloScoreJson & {
   teamRank: number;
 };
 
@@ -36,7 +37,7 @@ export default function Game(props: Props) {
 
   let sortedScores = game.scores.map((m) => {
     const sortedScore = m as SortedScore;
-    sortedScore.teamRank = m.team === winningTeam ? 1 : 2;
+    sortedScore.teamRank = m.match?.team === winningTeam ? 1 : 2;
     return sortedScore;
   });
 
@@ -51,7 +52,7 @@ export default function Game(props: Props) {
       <div className={classWithModifiers('mp-history-game__player-scores', showTeams ? [] : ['no-teams'])}>
         {sortedScores.map((m) => (
           <Score
-            key={m.slot}
+            key={m.match?.slot ?? m.user_id}
             mode={game.mode}
             score={m}
             users={props.users} />

@@ -29,12 +29,12 @@ class Event extends Model
     protected $primaryKey = 'event_id';
 
     const EVENT_TYPES = [
-        'player_left' => 'PART',
-        'player_joined' => 'JOIN',
-        'player_kicked' => 'KICK',
-        'room_created' => 'CREATE',
-        'room_disbanded' => 'DISBAND',
-        'host_changed' => 'HOST',
+        'player-left' => 'PART',
+        'player-joined' => 'JOIN',
+        'player-kicked' => 'KICK',
+        'room-created' => 'CREATE',
+        'room-disbanded' => 'DISBAND',
+        'host-changed' => 'HOST',
     ];
 
     public function legacyMatch()
