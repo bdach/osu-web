@@ -24,14 +24,14 @@ export default interface Match {
 }
 
 export type MatchEventType =
-  | 'player_left'
-  | 'player_joined'
-  | 'player_kicked'
-  | 'room_created'
-  | 'room_disbanded'
-  | 'game_started'
-  | 'game_aborted'
-  | 'host_changed'
+  | 'player-left'
+  | 'player-joined'
+  | 'player-kicked'
+  | 'room-created'
+  | 'room-disbanded'
+  | 'game-started'
+  | 'game-aborted'
+  | 'host-changed'
   | 'other';
 
 export interface MatchEventDetail {

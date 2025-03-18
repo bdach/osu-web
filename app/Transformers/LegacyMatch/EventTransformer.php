@@ -30,7 +30,7 @@ class EventTransformer extends TransformerAbstract
             return [
                 'id' => $event->event_id,
                 'detail' => [
-                    'type' => $event->event_type,
+                    'type' => str_replace('_', '-', $event->event_type),
                 ],
                 'timestamp' => $event->timestamp,
                 'user_id' => $event->user_id,
