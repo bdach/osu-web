@@ -11,6 +11,7 @@ use App\Libraries\Search\ScoreSearchParams;
 use App\Models\Beatmap;
 use App\Models\DeletedUser;
 use App\Models\LegacyMatch;
+use App\Models\Multiplayer\PlaylistItem;
 use App\Models\Multiplayer\PlaylistItemUserHighScore;
 use App\Models\Multiplayer\ScoreLink as MultiplayerScoreLink;
 use App\Models\Score\Best\Model as ScoreBest;
@@ -247,14 +248,19 @@ class ScoreTransformer extends TransformerAbstract
         return $this->item($score, new Score\CurrentUserAttributesTransformer());
     }
 
-    public function includeMatch(LegacyMatch\Score $score)
+    public function includeMatch(LegacyMatch\Score|PlaylistItem $score)
     {
-        // TODO: this is broken and can't work with new scores
-        // lift all of this state to game level
-        return $this->primitive([
-            'slot' => $score->slot,
-            'team' => $score->team,
-        ]);
+        if ($score instanceof LegacyMatch\Score) {
+            return $this->primitive([
+                'slot' => $score->slot,
+                'team' => $score->team,
+            ]);
+        } else {
+            $teams = $score->roomEvent->room_state?->teams;
+            return $this->primitive([
+                'team' => $teams[$score->user_id] ?? 'none',
+            ]);
+        }
     }
 
     public function includePosition(MultiplayerScoreLink $scoreLink)

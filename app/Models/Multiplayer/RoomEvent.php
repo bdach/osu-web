@@ -14,6 +14,7 @@ use App\Models\User;
  * @property PlaylistItem|null $game
  * @property int|null $playlist_item_id
  * @property int $room_id
+ * @property RoomState|null $room_state
  * @property \Carbon\Carbon $timestamp
  * @property User|null $user
  * @property int|null $user_id
@@ -32,6 +33,10 @@ class RoomEvent extends Model
     ];
 
     protected $table = 'multiplayer_room_events';
+
+    protected $casts = [
+        'room_state' => RoomState::class,
+    ];
 
     public function room()
     {

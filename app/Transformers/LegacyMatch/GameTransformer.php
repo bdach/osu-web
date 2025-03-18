@@ -42,7 +42,7 @@ class GameTransformer extends TransformerAbstract
                 'mode' => Beatmap::modeStr($game->ruleset_id),
                 'mode_int' => $game->ruleset_id,
                 'scoring_type' => 'score', // nothing else is supported right now
-                'team_type' => 'head-to-head', // TODO: it's wrong to hardcode this and there's no way to do the right thing right now
+                'team_type' => str_replace('_', '-', $game->roomEvent->room_state->roomType),
                 'mods' => $game->required_mods,
             ];
         }

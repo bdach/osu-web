@@ -24,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property bool $freestyle
  * @property Room $room
  * @property int $room_id
+ * @property RoomEvent|null $roomEvent
  * @property int|null $ruleset_id
  * @property \Illuminate\Database\Eloquent\Collection $scoreLinks ScoreLink
  * @property \Carbon\Carbon|null $updated_at
@@ -108,6 +109,11 @@ class PlaylistItem extends Model
     public function scoreTokens(): HasMany
     {
         return $this->hasMany(ScoreToken::class);
+    }
+
+    public function roomEvent()
+    {
+        return $this->hasOne(RoomEvent::class, 'playlist_item_id');
     }
 
     public function save(array $options = [])

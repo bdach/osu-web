@@ -27,6 +27,7 @@ return new class extends Migration
             $table->unsignedBigInteger('playlist_item_id')->nullable();
             $table->unsignedInteger('user_id')->nullable();
             $table->timestamp('timestamp')->useCurrent();
+            $table->json('room_state')->nullable();
         });
     }
 
