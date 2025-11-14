@@ -650,6 +650,7 @@ Route::group(['prefix' => '_lio', 'middleware' => 'lio', 'as' => 'interop.'], fu
         });
 
         Route::group(['as' => 'multiplayer.', 'namespace' => 'Multiplayer', 'prefix' => 'multiplayer'], function () {
+            Route::put('rooms/{room}/chat', 'RoomsController@createChat')->name('rooms.createChat');
             Route::put('rooms/{room}/users/{user}', 'RoomsController@join')->name('rooms.join');
             Route::delete('rooms/{room}/users/{user}', 'RoomsController@part')->name('rooms.part');
             Route::apiResource('rooms', 'RoomsController', ['only' => ['store']]);

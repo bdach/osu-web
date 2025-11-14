@@ -6,11 +6,29 @@
 namespace App\Http\Controllers\InterOp\Multiplayer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Chat\Channel;
 use App\Models\Multiplayer\Room;
 use App\Models\User;
 
 class RoomsController extends Controller
 {
+    public function createChat(string $roomId)
+    {
+        $addHost = get_bool(request('add_host'));
+
+        DB::transaction(function () use ($roomId, $addHost) {
+            $room = Room::findOrFail($roomId);
+            $channel = Channel::createMultiplayer($room);
+
+            if ($addHost) {
+                $host = User::findOrFail($room->host_id);
+                $channel->addUser($host);
+            }
+
+            $room->update(['channel_id' => $channel->channel_id]);
+        });
+    }
+
     public function join(string $id, string $userId)
     {
         $user = User::findOrFail($userId);
@@ -32,6 +50,7 @@ class RoomsController extends Controller
         return response(null, 204);
     }
 
+    // obsolete, can remove 20260514
     public function store()
     {
         $params = \Request::all();
