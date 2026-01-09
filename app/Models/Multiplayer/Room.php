@@ -800,8 +800,9 @@ class Room extends Model
     {
         $banchoBotId = $GLOBALS['cfg']['osu']['legacy']['bancho_bot_user_id'];
 
-        if ($this->host->getKey() === $banchoBotId) {
-            // BanchoBot can always create rooms.
+        if ($this->host->getKey() === $banchoBotId || $this->host->isBot()) {
+            // bots can always create rooms.
+            // TODO: weird temporary allowance for mp referees. will need to reevaluate later
             return;
         }
 

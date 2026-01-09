@@ -503,6 +503,7 @@ $scopeDescriptions = [
     'friends.read' => 'Allows reading of the user\'s friend list.',
     'group_permissions' => "Allows `delegate` tokens to inherit the Resource Owner's group permissions in some cases.",
     'identify' => 'Allows reading of the public profile of the user (`/me`).',
+    'multiplayer.write' => 'Allows management of lazer multiplayer rooms via the spectator server.',
     'public' => 'Allows reading of publicly available data on behalf of the user.',
 ];
 @endphp

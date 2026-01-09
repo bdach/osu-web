@@ -53,7 +53,7 @@ class AuthServiceProvider extends ServiceProvider
         // RouteServiceProvider current runs before our provider, so Passport's default routes will override
         // those set in routes/web.php.
         Route::group(['prefix' => 'oauth', 'as' => 'oauth.'], function () {
-            Route::post('token', AccessTokenController::class.'@issueToken')->middleware('throttle')->name('passport.token');
+            Route::post('token', AccessTokenController::class.'@issueToken')->middleware(['throttle', 'Illuminate\Http\Middleware\HandleCors'])->name('passport.token');
             Route::get('authorize', AuthorizationController::class.'@authorize')
                 ->middleware(['web', 'verify-user'])
                 ->name('authorizations.authorize');
@@ -75,6 +75,7 @@ class AuthServiceProvider extends ServiceProvider
             'friends.read' => osu_trans('api.scopes.friends.read'),
             'group_permissions' => '',
             'identify' => osu_trans('api.scopes.identify'),
+            'multiplayer.write' => osu_trans('api.scopes.multiplayer.write'),
             'public' => osu_trans('api.scopes.public'),
         ]);
     }
