@@ -10,11 +10,15 @@ import ScoreModJson from './score-mod-json';
 
 export function playlistItemFromLegacy(game: LegacyMatchGameJson): PlaylistItemJsonForMultiplayerEvent {
   const teams: Details['teams'] = {};
+  const slots: Details['slots'] = {};
+
   for (const score of game.scores) {
     const team = score.match.team;
     if (team === 'blue' || team === 'red') {
       teams[score.user_id] = team;
     }
+
+    slots[score.user_id] = score.match.slot;
   }
 
   return {
@@ -24,6 +28,7 @@ export function playlistItemFromLegacy(game: LegacyMatchGameJson): PlaylistItemJ
     created_at: game.start_time,
     details: {
       room_type: roomTypeFromLegacy[game.team_type],
+      slots,
       started_at: game.start_time,
       teams,
     },
@@ -41,6 +46,7 @@ export function playlistItemFromLegacy(game: LegacyMatchGameJson): PlaylistItemJ
 
 export interface Details {
   room_type: RealtimeRoomType;
+  slots?: Partial<Record<number, number>>;
   started_at: string;
   teams?: Partial<Record<number, 'red' | 'blue'>>;
 }
